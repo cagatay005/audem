@@ -1,0 +1,20 @@
+# C++ Derleme (Build) Çıktıları
+build/
+*.obj
+*.lib
+*.exp
+*.pyd
+*.dll
+
+# Python Önbellek Dosyaları
+__pycache__/
+*.py[cod]
+
+# Veritabanı ve Geçici Ses Dosyaları
+data/
+*.db
+*.wav
+
+# İşletim Sistemi Kalıntıları
+.DS_Store
+Thumbs.db
