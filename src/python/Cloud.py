@@ -30,7 +30,7 @@ class ShazamCloud:
                 rawData = wf.readframes(wf.getnframes())
 
             # 2. FREKANS DÖNÜŞÜMÜ (Resampling)
-            # Eğer sesimiz 44100 Hz değilse (ki C++ motorumuz 8000 Hz üretiyor), Shazam için dönüştürüldü.
+            # Eğer ses 44100 Hz değilse (ki C++ motorumuz 8000 Hz üretiyor), Shazam için dönüştürüldü.
             if framerate != 44100:
                 print(f"🎵 Frekans Uyuşmazlığı Çözülüyor: {framerate} Hz -> 44100 Hz")
                 # audioop modülü ile kaliteyi bozmadan sesi sündürerek 44100'e yayar
