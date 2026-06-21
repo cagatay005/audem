@@ -1,6 +1,5 @@
 # AUDEM - Hybrid Audio Recognition Engine
 
-![Desktop App](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey?style=flat-square)
 ![C++ Core](https://img.shields.io/badge/Core-C++%20%28High%20Performance%29-blue?style=flat-square)
 ![Python GUI](https://img.shields.io/badge/GUI-PyQt6%20%28Glassmorphism%29-green?style=flat-square)
 ![Bilingual](https://img.shields.io/badge/Language-EN%20%7C%20TR-red?style=flat-square)
