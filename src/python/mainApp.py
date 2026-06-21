@@ -12,7 +12,7 @@ import audio_engine # Saf C++ şöleni :))
 from database.hashTable import HashTable
 from database.fileStorage import FileStorage
 from matcher import Matcher
-from shazamCloud import ShazamCloud # Yeni Bulut modülü içeri aktarıldı.
+from Cloud import Cloud # Bulut modülü içeri aktarıldı.
 
 def main():
     print("="*40)
