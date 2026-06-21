@@ -31,7 +31,7 @@ def main():
     db = HashTable()
     storage = FileStorage(dbPath=dbFilePath)
     matcher = Matcher(minScoreThreshold=10)
-    cloudAPI = ShazamCloud() # Bulut motoru başlatıldı
+    cloudAPI = Cloud() # Bulut motoru başlatıldı
 
     # Çevrimdışı kayıtları belleğe yükle
     storage.loadDatabase(db)
