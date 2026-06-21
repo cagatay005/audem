@@ -4,8 +4,8 @@ import base64
 import wave
 import audioop
 
-class ShazamCloud:
-    def __init__(self, apiKey="BURAYA_KENDI_RAPIDAPI_ANAHTARINIZI_YAZIN"):
+class Cloud:
+    def __init__(self, apiKey="API anahtarı buraya"):
         self.apiKey = apiKey
         self.url = "https://shazam.p.rapidapi.com/songs/v2/detect"
         
@@ -30,16 +30,16 @@ class ShazamCloud:
                 rawData = wf.readframes(wf.getnframes())
 
             # 2. FREKANS DÖNÜŞÜMÜ (Resampling)
-            # Eğer sesimiz 44100 Hz değilse (ki C++ motorumuz 8000 Hz üretiyor), Shazam için dönüştürüldü.
+            # Eğer ses 44100 Hz değilse (ki C++ motoru 8000 Hz üretiyor), Shazam için dönüştürüldü.
             if framerate != 44100:
-                print(f"🎵 Frekans Uyuşmazlığı Çözülüyor: {framerate} Hz -> 44100 Hz")
+                print(f"Frekans Uyuşmazlığı Çözülüyor: {framerate} Hz -> 44100 Hz")
                 # audioop modülü ile kaliteyi bozmadan sesi sündürerek 44100'e yayar
                 rawData, _ = audioop.ratecv(rawData, sampwidth, nchannels, framerate, 44100, None)
 
             # 3. Sesi Base64 formatına çevirir
             base64Audio = base64.b64encode(rawData).decode('utf-8')
 
-            print(f"☁️ Buluta bağlanılıyor... (Gönderilen Veri: {len(base64Audio) // 1024} KB)")
+            print(f"Buluta bağlanılıyor... (Gönderilen Veri: {len(base64Audio) // 1024} KB)")
             
             response = requests.post(self.url, data=base64Audio, headers=self.headers)
             
@@ -49,7 +49,14 @@ class ShazamCloud:
                 if 'track' in result and result['track']:
                     songName = result['track']['title']
                     artist = result['track']['subtitle']
-                    return {"success": True, "title": songName, "artist": artist}
+                    
+                    # Albüm kapağının linkini güvenli bir şekilde çeker.
+                    cover_url = result['track'].get('images', {}).get('coverart')
+                    if not cover_url: 
+                        cover_url = result['track'].get('share', {}).get('image')
+                    
+                    # Arayüze resmi gönderir.
+                    return {"success": True, "title": songName, "artist": artist, "cover": cover_url}
                 else:
                     return {"success": False, "message": "Şarkı bulunamadı. (Farklı bir kısmını dinletmeyi deneyin)"}
             else:

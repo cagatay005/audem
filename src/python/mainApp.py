@@ -16,7 +16,7 @@ from shazamCloud import ShazamCloud # Yeni Bulut modülü içeri aktarıldı.
 
 def main():
     print("="*40)
-    print("      ECHOTRACE SES MOTORU BAŞLATILIYOR     ")
+    print("      AUDEM SES MOTORU BAŞLATILIYOR     ")
     print("="*40)
 
     # Veritabanı ve geçici dosya yolları
@@ -84,11 +84,11 @@ def main():
                 
                 print("-"*30)
                 if bestMatch:
-                    print(f"🎵 YEREL EŞLEŞME BULUNDU! 🎵")
+                    print(f"YEREL EŞLEŞME BULUNDU! 🎵")
                     print(f"-> Şarkı: {bestMatch}")
                     print(f"-> Güven Skoru: {score} tepe noktası hizalandı.")
                 else:
-                    print(f"❌ Yerel veritabanında eşleşme bulunamadı.")
+                    print(f"Yerel veritabanında eşleşme bulunamadı.")
                 print("-"*30)
             except Exception as e:
                 print(f"C++ Motor Hatası: {e}")
@@ -96,7 +96,7 @@ def main():
         elif choice == '3':
             recordTimeSec = 5 
             
-            print(f"\n☁️ Bulut Modu devrede. Ortam {recordTimeSec} saniye boyunca dinleniyor...")
+            print(f"\nBulut Modu devrede. Ortam {recordTimeSec} saniye boyunca dinleniyor...")
             temp_wav_path = os.path.join(dataDir, "temp_cloud.wav")
             
             try:
@@ -107,13 +107,13 @@ def main():
                     
                     print("-" * 30)
                     if "success" in result and result["success"]:
-                        print(f"🎵 BULUT EŞLEŞMESİ BULUNDU! 🎵")
+                        print(f"BULUT EŞLEŞMESİ BULUNDU! 🎵")
                         print(f"-> Şarkı: {result['title']}")
                         print(f"-> Sanatçı: {result['artist']}")
                     elif "error" in result:
-                        print(f"❌ BULUT HATASI: {result['error']}")
+                        print(f"BULUT HATASI: {result['error']}")
                     else:
-                        print(f"❌ Şarkı Shazam global veritabanında bulunamadı.")
+                        print(f"Şarkı Shazam global veritabanında bulunamadı.")
                     print("-" * 30)
                     
                     if os.path.exists(temp_wav_path):
@@ -124,7 +124,7 @@ def main():
                 print(f"Bulut Modu Kritik Hatası: {e}")
 
         elif choice == '4':
-            print("EchoTrace kapatılıyor. Müziğin izini sürmeye devam edin!")
+            print("Audem kapatılıyor. Müziğin izini sürmeye devam edin!")
             break
         else:
             print("Geçersiz bir tuşa bastınız.")
