@@ -12,7 +12,7 @@ import audio_engine # Saf C++ şöleni :))
 from database.hashTable import HashTable
 from database.fileStorage import FileStorage
 from matcher import Matcher
-from shazamCloud import ShazamCloud # Yeni Bulut modülü içeri aktarıldı.
+from Cloud import Cloud # Bulut modülü içeri aktarıldı.
 
 def main():
     print("="*40)
@@ -31,7 +31,7 @@ def main():
     db = HashTable()
     storage = FileStorage(dbPath=dbFilePath)
     matcher = Matcher(minScoreThreshold=10)
-    cloudAPI = ShazamCloud() # Bulut motoru başlatıldı
+    cloudAPI = Cloud() # Bulut motoru başlatıldı
 
     # Çevrimdışı kayıtları belleğe yükle
     storage.loadDatabase(db)
