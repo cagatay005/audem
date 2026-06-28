@@ -420,20 +420,25 @@ class AudemGUI(QMainWindow):
     def _cloud_task(self):
         temp_wav = os.path.join(dataDir, "temp_cloud.wav")
         try:
-            # Arayüzü dondurmamak için C++ fonksiyonunu farklı işlemci çekirdeğine yollandı
             future = self.executor.submit(engine_record_to_file, temp_wav, 5000)
             if future.result(): 
                 res = self.cloudAPI.identifySong(temp_wav)
                 if res.get("success"):
                     self.signals.finished.emit(True, res['title'], res['artist'], res.get('cover', ''))
                 elif res.get("error"):
-                    self.signals.finished.emit(False, "Bulut Hatası", res['error'], "")
+                    title = "Cloud Error" if self.current_lang == "EN" else "Bulut Hatası"
+                    self.signals.finished.emit(False, title, res['error'], "")
                 else:
-                    self.signals.finished.emit(False, "Bulunamadı", "Şarkı Audem küresel ağında yok.", "")
+                    title = "Not Found" if self.current_lang == "EN" else "Bulunamadı"
+                    desc = "Song not found in Audem global network." if self.current_lang == "EN" else "Şarkı Audem küresel ağında yok."
+                    self.signals.finished.emit(False, title, desc, "")
             else:
-                self.signals.finished.emit(False, "Kayıt Hatası", "Mikrofon okunamadı.", "")
+                title = "Recording Error" if self.current_lang == "EN" else "Kayıt Hatası"
+                desc = "Microphone could not be read." if self.current_lang == "EN" else "Mikrofon okunamadı."
+                self.signals.finished.emit(False, title, desc, "")
         except Exception as e:
-            self.signals.finished.emit(False, "Hata", str(e), "")
+            title = "Error" if self.current_lang == "EN" else "Hata"
+            self.signals.finished.emit(False, title, str(e), "")
 
     def run_local_search(self):
         title = "Listening..." if self.current_lang == "EN" else "Ortam Dinleniyor..."
@@ -446,15 +451,22 @@ class AudemGUI(QMainWindow):
             future = self.executor.submit(engine_record_and_hash, 5000)
             hashes = future.result()
             if not hashes:
-                self.signals.finished.emit(False, "Ses Alınamadı", "Lütfen tekrar deneyin.", "")
+                title = "No Audio Detected" if self.current_lang == "EN" else "Ses Alınamadı"
+                desc = "Please try again." if self.current_lang == "EN" else "Lütfen tekrar deneyin."
+                self.signals.finished.emit(False, title, desc, "")
                 return
+            
             bestMatch, score = self.matcher.findBestMatch(self.db.queryHashes(hashes))
             if bestMatch:
-                self.signals.finished.emit(True, bestMatch, f"Güven Skoru: {score}", "")
+                desc = f"Confidence Score: {score}" if self.current_lang == "EN" else f"Güven Skoru: {score}"
+                self.signals.finished.emit(True, bestMatch, desc, "")
             else:
-                self.signals.finished.emit(False, "Bulunamadı", "Bu şarkı yerel veritabanında yok.", "")
+                title = "Not Found" if self.current_lang == "EN" else "Bulunamadı"
+                desc = "This song is not in the local database." if self.current_lang == "EN" else "Bu şarkı yerel veritabanında yok."
+                self.signals.finished.emit(False, title, desc, "")
         except Exception as e:
-            self.signals.finished.emit(False, "Hata", str(e), "")
+            title = "Error" if self.current_lang == "EN" else "Hata"
+            self.signals.finished.emit(False, title, str(e), "")
 
     def run_teach(self):
         prompt_title = "New Song" if self.current_lang == "EN" else "Yeni Şarkı"
@@ -474,11 +486,17 @@ class AudemGUI(QMainWindow):
             if hashes:
                 self.db.insertSong(song_name, hashes)
                 self.storage.saveDatabase(self.db)
-                self.signals.finished.emit(True, "Sisteme Kazındı!", f"{len(hashes)} adet frekans noktası eklendi.", "")
+                
+                title = "Saved to System!" if self.current_lang == "EN" else "Sisteme Kazındı!"
+                desc = f"{len(hashes)} frequency points added." if self.current_lang == "EN" else f"{len(hashes)} adet frekans noktası eklendi."
+                self.signals.finished.emit(True, title, desc, "")
             else:
-                self.signals.finished.emit(False, "Sessizlik Algılandı", "Lütfen daha yakından dinletin.", "")
+                title = "Silence Detected" if self.current_lang == "EN" else "Sessizlik Algılandı"
+                desc = "Please move closer to the source." if self.current_lang == "EN" else "Lütfen daha yakından dinletin."
+                self.signals.finished.emit(False, title, desc, "")
         except Exception as e:
-            self.signals.finished.emit(False, "Hata", str(e), "")
+            title = "Error" if self.current_lang == "EN" else "Hata"
+            self.signals.finished.emit(False, title, str(e), "")
 
 if __name__ == "__main__":
     import multiprocessing
